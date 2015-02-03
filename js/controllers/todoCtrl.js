@@ -6,7 +6,7 @@
  * - exposes the model to the template and provides event handlers
  */
 angular.module('todomvc')
-	.controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, store) {
+	.controller('TodoCtrl', function TodoCtrl($scope, $http, $routeParams, $filter, store) {
 		'use strict';
 
 		var todos = $scope.todos = store.todos;
@@ -121,5 +121,16 @@ angular.module('todomvc')
 					$scope.toggleCompleted(todo, completed);
 				}
 			});
+		};
+
+		$scope.importNotes = function(){
+			
+			$http.post('http://private-f1954-mobilebank.apiary-mock.com/notes')
+				.success(function(data, status){
+					console.log(data);
+				})
+				.error(function(data, status){
+					console.log(data);
+				});
 		};
 	});

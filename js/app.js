@@ -9,6 +9,9 @@ angular.module('todomvc', ['ngRoute'])
 	.config(function ($routeProvider) {
 		'use strict';
 
+		//$httpProvider.defaults.useXDomain = true;
+        //delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
 		var routeConfig = {
 			controller: 'TodoCtrl',
 			templateUrl: 'todomvc-index.html',

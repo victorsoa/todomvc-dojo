@@ -13,14 +13,16 @@ angular.module('todomvc')
 
 		// Detect if an API backend is present. If so, return the API module, else
 		// hand off the localStorage adapter
-		return $http.get('/api')
+		
+		return $http.get('/api/todos')
 			.then(function () {
 				return $injector.get('api');
 			}, function () {
 				return $injector.get('localStorage');
 			});
+		
 	})
-
+	
 	.factory('api', function ($http) {
 		'use strict';
 
@@ -66,11 +68,15 @@ angular.module('todomvc')
 			},
 
 			get: function () {
-				return $http.get('/api/todos')
-					.then(function (resp) {
-						angular.copy(resp.data, store.todos);
-						return store.todos;
-					});
+				var data = [
+					{
+						"id":1,
+						"title":"Levar meu cachorro ao veterinário",
+						"completed":false
+					}
+				];
+				angular.copy(data, store.todos);
+				return store.todos;
 			},
 
 			insert: function (todo) {
@@ -102,7 +108,7 @@ angular.module('todomvc')
 
 		return store;
 	})
-
+	
 	.factory('localStorage', function ($q) {
 		'use strict';
 

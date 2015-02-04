@@ -124,13 +124,35 @@ angular.module('todomvc')
 		};
 
 		$scope.importNotes = function(){
-			
-			$http.post('http://private-f1954-mobilebank.apiary-mock.com/notes')
-				.success(function(data, status){
-					console.log(data);
+
+			$http({method: 'GET', url : 'http://private-b1cc7-todomvc1.apiary-mock.com/notes'})
+				.success(function(data, status){	
+					$scope.addTodoBatch(data, function(){
+						$scope.saving = false;
+					});
 				})
 				.error(function(data, status){
 					console.log(data);
 				});
 		};
+
+		$scope.addTodoBatch = function(arrTodos, completed){
+			
+			var total = arrTodos.length;
+			$scope.saving = true;
+			for(var i=0; i<total;i++){
+				store.insert(arrTodos[i]);
+			}
+			return completed();
+		};
+
+		/**
+		* Clear Local Storage onLoad Page.
+		*/
+		
+		$scope.init = function(){
+			localStorage.removeItem('todos-angularjs');
+		};
+		$scope.init();
+	
 	});

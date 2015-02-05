@@ -19,26 +19,10 @@ button {
 	appearance: none;
 }
 
-button.default {
-	background-color: #8d7d77;
-	color: white;
-	padding: 10px;
-	margin: 10px 2px;
-	border-radius: 5px;
-	cursor: pointer;
-}
-
-button.actions {
-	background-color: #669991;
-}
-
 body {
 	font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	line-height: 1.4em;
-	background: #eaeaea url('bg.png');
 	color: #4d4d4d;
-	width: 550px;
-	margin: 0 auto;
 	-webkit-font-smoothing: antialiased;
 	-moz-font-smoothing: antialiased;
 	-ms-font-smoothing: antialiased;

@@ -6,7 +6,7 @@
  * - exposes the model to the template and provides event handlers
  */
 angular.module('todomvc')
-	.controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoStorage) {
+	.controller('TodoCtrl', function TodoCtrl($scope, $routeParams, $filter, todoStorage, $http) {
 		'use strict';
 
 		var todos = $scope.todos = todoStorage.get();
@@ -81,4 +81,76 @@ angular.module('todomvc')
 				todo.completed = !completed;
 			});
 		};
+
+		/**
+		*	Import notes Mock API - Apiary
+		*/
+		$scope.importNotes = function(){
+			// Init loading feedback
+			$scope.loading = true;
+			// Set API url
+			var apiUrl = 'http://private-b1cc7-todomvc1.apiary-mock.com/notes';
+			// Req data with $http dependence injection 
+			$http.get(apiUrl)
+				.success(function(data,success){
+					$scope.importedTodos = data;
+					if($scope.todos.length == 0){
+						$scope.applyNotes(true);
+						$scope.loading = false;
+					}else{
+						$scope.loading = false;
+						$scope.actionSetNotes = true;
+					}
+				})
+				.error(function(data){
+					$scope.loading = false;
+					$scope.actionSetNotes = false;
+					console.log(data);
+				});
+		};
+
+		/**
+		*	ApplyNotes
+		*/
+		$scope.applyNotes = function(overwrite){
+			// Set overwrite flag
+			var overwrite = overwrite;
+
+			if(overwrite){
+				/**
+				*	Apply and subscribe data
+				*	Clear all itens in localStorage
+				*/
+				$scope.todos = $scope.importedTodos;
+				localStorage.clear('todos-abgularjs');
+
+			}else{
+				/**
+				*	Copy data imported
+				*	Add itens in current todos
+				*/
+				var arrTodos = $scope.importedTodos;
+				for(var key in arrTodos){
+					$scope.todos.push(arrTodos[key]);
+				}
+			}
+			// Hide options buttons
+			$scope.actionSetNotes = false;
+			// Set imported itens in localStorage
+			todoStorage.put($scope.importedTodos);
+			// Set todos
+			todos = $scope.todos;
+			$scope.newTodo = '';
+		};
+
+		/**
+		*	Clear All todos in object and localStorage
+		*/
+		$scope.clearAllTodos = function(){
+			localStorage.clear('todos-abgularjs');
+			$scope.todos = [];
+			// Update var todos
+			todos = $scope.todos;
+		};
+
 	});
